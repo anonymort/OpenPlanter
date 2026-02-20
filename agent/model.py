@@ -1004,7 +1004,7 @@ class ScriptedModel:
 @dataclass
 class EchoFallbackModel:
     note: str = (
-        "No provider API keys configured. Set OpenAI/Anthropic/OpenRouter keys to use a live LLM."
+        "No provider API keys configured. Set OpenAI/Anthropic/OpenRouter/Gemini keys to use a live LLM."
     )
 
     def create_conversation(self, system_prompt: str, initial_user_message: str) -> Conversation:

@@ -60,6 +60,11 @@ _MODEL_CONTEXT_WINDOWS: dict[str, int] = {
     "gpt-4o": 128_000,
     "gpt-4.1": 1_000_000,
     "gpt-5-turbo-16k": 16_000,
+    "gemini-2.5-pro": 1_000_000,
+    "gemini-2.5-flash": 1_000_000,
+    "gemini-3-flash": 1_000_000,
+    "gemini-2.0-flash": 1_000_000,
+    "gemini-2.0-flash-lite": 1_000_000,
 }
 _DEFAULT_CONTEXT_WINDOW = 128_000
 _CONDENSATION_THRESHOLD = 0.75
@@ -81,6 +86,12 @@ def _model_tier(model_name: str, reasoning_effort: str | None = None) -> int:
         return 2
     if "haiku" in lower:
         return 3
+    if "gemini" in lower:
+        if "pro" in lower:
+            return 1
+        if "lite" in lower:
+            return 3
+        return 2  # flash variants
     if lower.startswith("gpt-5") and "codex" in lower:
         effort = (reasoning_effort or "").lower()
         return {"xhigh": 1, "high": 2, "medium": 3, "low": 4}.get(effort, 2)
@@ -95,6 +106,8 @@ def _lowest_tier_model(model_name: str) -> tuple[str, str | None]:
     lower = model_name.lower()
     if "claude" in lower:
         return ("claude-haiku-4-5-20251001", None)
+    if "gemini" in lower:
+        return ("gemini-2.0-flash-lite", None)
     return (model_name, None)
 
 
